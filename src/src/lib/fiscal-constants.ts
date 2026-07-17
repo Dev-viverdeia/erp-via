@@ -1,0 +1,10 @@
+export const PIS_RATE = 0.0165;
+export const COFINS_RATE = 0.076;
+export const IRPJ_RATE = 0.15;
+export const IRPJ_ADICIONAL_RATE = 0.10;
+export const IRPJ_ADICIONAL_LIMITE = 60000;
+export const CSLL_RATE = 0.09;
+export const IR_RETENCAO_RATE = 0.015;
+export const PIS_RETENCAO_RATE = 0.0065;
+export const COFINS_RETENCAO_RATE = 0.03;
+export const CSLL_RETENCAO_RATE = 0.01;

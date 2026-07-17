@@ -1,0 +1,1 @@
+ALTER TABLE cost_centers ADD COLUMN parent_id uuid REFERENCES cost_centers(id);

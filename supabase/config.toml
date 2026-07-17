@@ -1,0 +1,16 @@
+project_id = "plddtqltiankiourbvcy"
+
+[functions.webhook-crm]
+verify_jwt = false
+
+[functions.webhook-appmax]
+verify_jwt = false
+
+[functions.webhook-hubla]
+verify_jwt = false
+
+[functions.cron-overdue]
+verify_jwt = false
+
+[functions.seed-company-data]
+verify_jwt = false
