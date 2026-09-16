@@ -1,3 +1,4 @@
+import { NEGOCIO } from "@/config/negocio";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -43,19 +44,17 @@ export default function Login() {
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/10 rounded-full blur-[120px]" />
 
         <div className="relative z-10 max-w-md px-12 space-y-8">
-          <img src="/logo-white.svg" alt="Viver de IA" className="h-7 w-auto" />
+          {NEGOCIO.logos.escuro ? (
+            <img src={NEGOCIO.logos.escuro} alt={NEGOCIO.nome} className="h-7 w-auto" />
+          ) : (
+            <p className="text-xl font-bold font-heading">{NEGOCIO.nome}</p>
+          )}
 
           <div className="space-y-4">
-            <h2 className="text-3xl font-bold font-heading leading-tight">
-              Gestao financeira{" "}
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary">
-                inteligente.
-              </span>
+            <h2 className="text-3xl font-bold font-heading leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-accent">
+              {NEGOCIO.slogan}
             </h2>
-            <p className="text-white/60 leading-relaxed">
-              Controle receitas, despesas, contabilidade e fiscal em uma plataforma unica,
-              feita para empresas que querem crescer com clareza financeira.
-            </p>
+            <p className="text-white/60 leading-relaxed">{NEGOCIO.descricao}</p>
           </div>
 
           <div className="flex gap-6 pt-4">
@@ -78,8 +77,14 @@ export default function Login() {
         <div className="w-full max-w-sm space-y-8 animate-fade-in">
           {/* Mobile logo */}
           <div className="flex items-center justify-center lg:hidden">
-            <img src="/logo-black.svg" alt="Viver de IA" className="h-5 w-auto dark:hidden" />
-            <img src="/logo-white.svg" alt="Viver de IA" className="h-5 w-auto hidden dark:block" />
+            {NEGOCIO.logos.claro ? (
+              <img src={NEGOCIO.logos.claro} alt={NEGOCIO.nome} className="h-5 w-auto dark:hidden" />
+            ) : null}
+            {NEGOCIO.logos.escuro ? (
+              <img src={NEGOCIO.logos.escuro} alt={NEGOCIO.nome} className="h-5 w-auto hidden dark:block" />
+            ) : (
+              <p className="text-lg font-bold font-heading">{NEGOCIO.nome}</p>
+            )}
           </div>
 
           <div className="space-y-2 text-center lg:text-left">

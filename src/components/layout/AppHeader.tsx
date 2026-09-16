@@ -15,19 +15,24 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { NEGOCIO } from "@/config/negocio";
+
 const routeNames: Record<string, string> = {
-  "/": "Dashboard",
-  "/receitas": "Receitas",
-  "/despesas": "Despesas",
-  "/fluxo-de-caixa": "Fluxo de Caixa",
+  "/": NEGOCIO.modulos.dashboard.titulo,
+  "/vendas": NEGOCIO.modulos.vendas.titulo,
+  "/receitas": NEGOCIO.modulos.receitas.titulo,
+  "/despesas": NEGOCIO.modulos.despesas.titulo,
+  "/fluxo-de-caixa": NEGOCIO.modulos.fluxoDeCaixa.titulo,
+  "/clientes": NEGOCIO.modulos.clientes.titulo,
+  "/fornecedores": NEGOCIO.modulos.fornecedores.titulo,
   "/parceiros": "Parceiros",
-  "/contas-bancarias": "Contas Bancarias",
-  "/contabilidade": "Contabilidade",
-  "/controladoria": "Controladoria",
-  "/fiscal": "Fiscal",
-  "/conciliacao": "Conciliacao",
-  "/pessoas": "Pessoas",
-  "/configuracoes": "Configuracoes",
+  "/contas-bancarias": NEGOCIO.modulos.contasBancarias.titulo,
+  "/contabilidade": NEGOCIO.modulos.contabilidade.titulo,
+  "/controladoria": NEGOCIO.modulos.controladoria.titulo,
+  "/fiscal": NEGOCIO.modulos.fiscal.titulo,
+  "/conciliacao": NEGOCIO.modulos.conciliacao.titulo,
+  "/pessoas": NEGOCIO.modulos.pessoas.titulo,
+  "/configuracoes": NEGOCIO.modulos.configuracoes.titulo,
 };
 
 export function AppHeader() {
@@ -48,7 +53,7 @@ export function AppHeader() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/" className="text-muted-foreground hover:text-foreground transition-colors text-sm">
-                ERP
+                {NEGOCIO.nome}
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator>

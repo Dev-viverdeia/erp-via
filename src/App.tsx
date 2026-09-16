@@ -41,6 +41,7 @@ import PessoaProfile from "./pages/PessoaProfile";
 import Configuracoes from "./pages/Configuracoes";
 import GatewayConfig from "./pages/GatewayConfig";
 import NotFound from "./pages/NotFound";
+import { moduloAtivo } from "@/config/negocio";
 
 const queryClient = new QueryClient();
 
@@ -63,33 +64,33 @@ const App = () => (
                   <MainLayout>
                     <Routes>
                       <Route path="/" element={<Index />} />
-                      <Route path="/vendas" element={<Vendas />} />
-                      <Route path="/vendas/:id" element={<VendaProfile />} />
-                      <Route path="/receitas" element={<Receitas />} />
-                      <Route path="/despesas" element={<Despesas />} />
-                      <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
-                      <Route path="/clientes" element={<Clientes />} />
-                      <Route path="/clientes/:id" element={<ClienteProfile />} />
-                      <Route path="/fornecedores" element={<Fornecedores />} />
-                      <Route path="/fornecedores/:id" element={<FornecedorProfile />} />
-                      <Route path="/contas-bancarias" element={<ContasBancarias />} />
-                      <Route path="/contabilidade" element={<Contabilidade />} />
-                      <Route path="/contabilidade/plano-de-contas" element={<PlanoDeContas />} />
-                      <Route path="/contabilidade/lancamentos" element={<LancamentosPage />} />
-                      <Route path="/contabilidade/balancete" element={<BalancetePage />} />
-                      <Route path="/contabilidade/razao" element={<RazaoPage />} />
-                      <Route path="/contabilidade/balanco" element={<BalancoPage />} />
-                      <Route path="/contabilidade/dfc" element={<DfcPage />} />
-                      <Route path="/contabilidade/periodos" element={<PeriodosFiscaisPage />} />
-                      <Route path="/controladoria" element={<Controladoria />} />
-                      <Route path="/controladoria/orcamento" element={<OrcamentoPage />} />
-                      <Route path="/controladoria/orcado-vs-realizado" element={<OrcadoVsRealizadoPage />} />
-                      <Route path="/controladoria/forecast" element={<ForecastPage />} />
-                      <Route path="/controladoria/indicadores" element={<IndicadoresPage />} />
-                      <Route path="/fiscal" element={<Fiscal />} />
-                      <Route path="/conciliacao" element={<Conciliacao />} />
-                      <Route path="/pessoas" element={<Pessoas />} />
-                      <Route path="/pessoas/:id" element={<PessoaProfile />} />
+                      {moduloAtivo("vendas") && <Route path="/vendas" element={<Vendas />} />}
+                      {moduloAtivo("vendas") && <Route path="/vendas/:id" element={<VendaProfile />} />}
+                      {moduloAtivo("receitas") && <Route path="/receitas" element={<Receitas />} />}
+                      {moduloAtivo("despesas") && <Route path="/despesas" element={<Despesas />} />}
+                      {moduloAtivo("fluxoDeCaixa") && <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />}
+                      {moduloAtivo("clientes") && <Route path="/clientes" element={<Clientes />} />}
+                      {moduloAtivo("clientes") && <Route path="/clientes/:id" element={<ClienteProfile />} />}
+                      {moduloAtivo("fornecedores") && <Route path="/fornecedores" element={<Fornecedores />} />}
+                      {moduloAtivo("fornecedores") && <Route path="/fornecedores/:id" element={<FornecedorProfile />} />}
+                      {moduloAtivo("contasBancarias") && <Route path="/contas-bancarias" element={<ContasBancarias />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade" element={<Contabilidade />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/plano-de-contas" element={<PlanoDeContas />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/lancamentos" element={<LancamentosPage />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/balancete" element={<BalancetePage />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/razao" element={<RazaoPage />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/balanco" element={<BalancoPage />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/dfc" element={<DfcPage />} />}
+                      {moduloAtivo("contabilidade") && <Route path="/contabilidade/periodos" element={<PeriodosFiscaisPage />} />}
+                      {moduloAtivo("controladoria") && <Route path="/controladoria" element={<Controladoria />} />}
+                      {moduloAtivo("controladoria") && <Route path="/controladoria/orcamento" element={<OrcamentoPage />} />}
+                      {moduloAtivo("controladoria") && <Route path="/controladoria/orcado-vs-realizado" element={<OrcadoVsRealizadoPage />} />}
+                      {moduloAtivo("controladoria") && <Route path="/controladoria/forecast" element={<ForecastPage />} />}
+                      {moduloAtivo("controladoria") && <Route path="/controladoria/indicadores" element={<IndicadoresPage />} />}
+                      {moduloAtivo("fiscal") && <Route path="/fiscal" element={<Fiscal />} />}
+                      {moduloAtivo("conciliacao") && <Route path="/conciliacao" element={<Conciliacao />} />}
+                      {moduloAtivo("pessoas") && <Route path="/pessoas" element={<Pessoas />} />}
+                      {moduloAtivo("pessoas") && <Route path="/pessoas/:id" element={<PessoaProfile />} />}
                       <Route path="/configuracoes" element={<Configuracoes />} />
                       <Route path="/configuracoes/gateways/novo" element={<GatewayConfig />} />
                       <Route path="/configuracoes/gateways/:id" element={<GatewayConfig />} />

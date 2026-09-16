@@ -11,48 +11,42 @@ import {
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import { useTheme } from "next-themes";
 
+import { NEGOCIO, type IdDoModulo } from "@/config/negocio";
+
 type NavItem = { title: string; url: string; icon: any };
 
-const navGroups = [
-  {
-    label: "Geral",
-    icon: LayoutGrid,
-    items: [
-      { title: "Dashboard", url: "/", icon: Home },
-      { title: "Vendas", url: "/vendas", icon: ShoppingCart },
-      { title: "Receitas", url: "/receitas", icon: TrendingUp },
-      { title: "Despesas", url: "/despesas", icon: TrendingDown },
-      { title: "Fluxo de Caixa", url: "/fluxo-de-caixa", icon: DollarSign },
-    ],
-  },
-  {
-    label: "Gestao",
-    icon: Briefcase,
-    items: [
-      { title: "Clientes", url: "/clientes", icon: Users },
-      { title: "Fornecedores", url: "/fornecedores", icon: Truck },
-      { title: "Contas Bancarias", url: "/contas-bancarias", icon: Landmark },
-      { title: "Pessoas", url: "/pessoas", icon: UserCheck },
-    ],
-  },
-  {
-    label: "Contabilidade",
-    icon: Calculator,
-    items: [
-      { title: "Contabilidade", url: "/contabilidade", icon: BookOpen },
-      { title: "Controladoria", url: "/controladoria", icon: PieChart },
-      { title: "Fiscal", url: "/fiscal", icon: FileText },
-      { title: "Conciliacao", url: "/conciliacao", icon: ArrowLeftRight },
-    ],
-  },
-  {
-    label: "Sistema",
-    icon: Cog,
-    items: [
-      { title: "Configuracoes", url: "/configuracoes", icon: Settings },
-    ],
-  },
+/* O menu nasce dos módulos do negócio (src/config/negocio.ts): um módulo
+   desligado some daqui e das rotas; o título é o que a pessoa lê. */
+const ITENS: Array<{ id: IdDoModulo; url: string; icon: any; grupo: string }> = [
+  { id: "dashboard", url: "/", icon: Home, grupo: "Geral" },
+  { id: "vendas", url: "/vendas", icon: ShoppingCart, grupo: "Geral" },
+  { id: "receitas", url: "/receitas", icon: TrendingUp, grupo: "Geral" },
+  { id: "despesas", url: "/despesas", icon: TrendingDown, grupo: "Geral" },
+  { id: "fluxoDeCaixa", url: "/fluxo-de-caixa", icon: DollarSign, grupo: "Geral" },
+  { id: "clientes", url: "/clientes", icon: Users, grupo: "Gestao" },
+  { id: "fornecedores", url: "/fornecedores", icon: Truck, grupo: "Gestao" },
+  { id: "contasBancarias", url: "/contas-bancarias", icon: Landmark, grupo: "Gestao" },
+  { id: "pessoas", url: "/pessoas", icon: UserCheck, grupo: "Gestao" },
+  { id: "contabilidade", url: "/contabilidade", icon: BookOpen, grupo: "Contabilidade" },
+  { id: "controladoria", url: "/controladoria", icon: PieChart, grupo: "Contabilidade" },
+  { id: "fiscal", url: "/fiscal", icon: FileText, grupo: "Contabilidade" },
+  { id: "conciliacao", url: "/conciliacao", icon: ArrowLeftRight, grupo: "Contabilidade" },
+  { id: "configuracoes", url: "/configuracoes", icon: Settings, grupo: "Sistema" },
 ];
+const GRUPOS: Array<{ label: string; icon: any }> = [
+  { label: "Geral", icon: LayoutGrid },
+  { label: "Gestao", icon: Briefcase },
+  { label: "Contabilidade", icon: Calculator },
+  { label: "Sistema", icon: Cog },
+];
+const navGroups = GRUPOS.map((grupo) => ({
+  ...grupo,
+  items: ITENS.filter((item) => item.grupo === grupo.label && NEGOCIO.modulos[item.id].ativo).map((item) => ({
+    title: NEGOCIO.modulos[item.id].titulo,
+    url: item.url,
+    icon: item.icon,
+  })),
+})).filter((grupo) => grupo.items.length > 0);
 
 /* ---- Expanded nav group ---- */
 function NavGroupExpanded({ items, label }: { items: NavItem[]; label: string }) {
@@ -129,25 +123,23 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { resolvedTheme } = useTheme();
-  const logoSrc = resolvedTheme === "light" ? "/logo-black.svg" : "/logo-white.svg";
-  const iconSrc = resolvedTheme === "light" ? "/icon-black.svg" : "/icon-white.svg";
+  const logoSrc = resolvedTheme === "light" ? NEGOCIO.logos.claro : NEGOCIO.logos.escuro;
+  const iconSrc = resolvedTheme === "light" ? NEGOCIO.logos.iconeClaro : NEGOCIO.logos.iconeEscuro;
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar backdrop-blur-3xl">
       {/* Logo */}
       <div className={`flex h-16 shrink-0 items-center overflow-hidden ${collapsed ? 'justify-center' : 'px-5'}`}>
         {collapsed ? (
-          <img
-            src={iconSrc}
-            alt="Viver de IA"
-            className="h-6 w-auto shrink-0"
-          />
+          iconSrc ? (
+            <img src={iconSrc} alt={NEGOCIO.nome} className="h-6 w-auto shrink-0" />
+          ) : (
+            <span className="text-base font-bold font-heading">{NEGOCIO.nome.slice(0, 1)}</span>
+          )
+        ) : logoSrc ? (
+          <img src={logoSrc} alt={NEGOCIO.nome} className="h-5 w-auto" />
         ) : (
-          <img
-            src={logoSrc}
-            alt="Viver de IA"
-            className="h-5 w-auto"
-          />
+          <span className="truncate text-base font-bold font-heading">{NEGOCIO.nome}</span>
         )}
       </div>
 
