@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
   // Validate token
   const token = req.headers.get("x-webhook-token");
   const expectedToken = Deno.env.get("HUBLA_WEBHOOK_TOKEN");
-  if (expectedToken && token !== expectedToken) {
+  if (!expectedToken || token !== expectedToken) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

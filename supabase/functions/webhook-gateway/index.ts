@@ -70,7 +70,7 @@ Deno.serve(async (req: Request) => {
   // 2. Validate webhook secret
   const secretHeader = config.webhook_secret_header || "x-webhook-token";
   const receivedSecret = req.headers.get(secretHeader);
-  if (config.webhook_secret && receivedSecret !== config.webhook_secret) {
+  if (!config.webhook_secret || receivedSecret !== config.webhook_secret) {
     return new Response(JSON.stringify({ error: "Invalid webhook secret" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
