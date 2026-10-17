@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
   // Validate webhook secret
   const secret = req.headers.get("x-webhook-secret");
   const expectedSecret = Deno.env.get("CRM_WEBHOOK_SECRET");
-  if (expectedSecret && secret !== expectedSecret) {
+  if (!expectedSecret || secret !== expectedSecret) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -63,10 +63,23 @@ Deno.serve(async (req) => {
       throw new Error("Missing required fields: sale_id, customer, total_amount, payment_type");
     }
 
+    // The configured integration owns this endpoint; never guess the first company.
+    const { data: configs, error: configError } = await supabase
+      .from("integration_configs")
+      .select("company_id")
+      .eq("provider", "crm")
+      .eq("is_active", true)
+      .limit(2);
+    if (configError || !configs || configs.length !== 1 || !configs[0].company_id) {
+      throw new Error("Configure exactly one company for this CRM webhook");
+    }
+    const companyId = configs[0].company_id;
+
     // Idempotency: check if revenue with this sale_id already exists
     const { data: existingRevenue } = await supabase
       .from("revenues")
       .select("id")
+      .eq("company_id", companyId)
       .eq("sale_id", sale_id)
       .maybeSingle();
 
@@ -77,27 +90,6 @@ Deno.serve(async (req) => {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
-
-    // We need a company_id. For webhooks, we'll look it up from integration_configs or use the first company.
-    // In production, the webhook secret should map to a specific company.
-    const { data: config } = await supabase
-      .from("integration_configs")
-      .select("company_id")
-      .eq("provider", "crm")
-      .eq("is_active", true)
-      .limit(1)
-      .maybeSingle();
-
-    let companyId = config?.company_id;
-    if (!companyId) {
-      // Fallback: get first company
-      const { data: firstCompany } = await supabase.from("companies").select("id").limit(1).single();
-      companyId = firstCompany?.id;
-    }
-
-    if (!companyId) {
-      throw new Error("No company found for webhook processing");
     }
 
     // Update log with company_id
