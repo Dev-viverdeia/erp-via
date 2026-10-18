@@ -41,12 +41,12 @@ import PessoaProfile from "./pages/PessoaProfile";
 import Configuracoes from "./pages/Configuracoes";
 import GatewayConfig from "./pages/GatewayConfig";
 import NotFound from "./pages/NotFound";
-import { moduloAtivo } from "@/config/negocio";
+import { moduloAtivo, temaDaMarca } from "@/config/negocio";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+  <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme={temaDaMarca()} enableSystem={false}>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />

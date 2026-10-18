@@ -96,22 +96,50 @@ export function hexParaHsl(hex: string): string | null {
   return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
-/**
- * Aplica o nome e as cores do negócio na página: o título da aba e as
- * variáveis do tema. Chamado uma vez, na abertura do app.
- */
+/** A marca com fundo definido mantém o mesmo tema em todos os dispositivos. */
+function luminancia(hex: string): number | null {
+  if (!/^#[0-9a-f]{6}$/i.test(hex.trim())) return null;
+  const rgb = [1, 3, 5].map((offset) => {
+    const c = parseInt(hex.trim().slice(offset, offset + 2), 16) / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
+}
+
+export function temaDaMarca(fundo = NEGOCIO.cores.fundo): "light" | "dark" | undefined {
+  const luz = luminancia(fundo);
+  return luz === null ? undefined : luz > 0.179 ? "light" : "dark";
+}
+
+/** Preserva a tinta da marca quando legível; senão escolhe texto com contraste. */
+export function tintaLegivel(fundo: string, preferida?: string): string {
+  const luz = luminancia(fundo);
+  if (luz === null) return "#FFFFFF";
+  const tinta = preferida ? luminancia(preferida) : null;
+  if (tinta !== null && (Math.max(luz, tinta) + 0.05) / (Math.min(luz, tinta) + 0.05) >= 4.5) {
+    return preferida!;
+  }
+  return luz > 0.179 ? "#000000" : "#FFFFFF";
+}
+
+/** Nome, fundo e contraste são aplicados juntos, antes da primeira tela. */
 export function aplicarNegocio(documento: Document = document): void {
   documento.title = NEGOCIO.nome;
+  documento.documentElement.lang = "pt-BR";
   const raiz = documento.documentElement;
-  const primaria = hexParaHsl(NEGOCIO.cores.primaria);
-  const destaque = hexParaHsl(NEGOCIO.cores.destaque);
-  const fundo = NEGOCIO.cores.fundo ? hexParaHsl(NEGOCIO.cores.fundo) : null;
-  if (primaria) {
-    raiz.style.setProperty("--primary", primaria);
-    raiz.style.setProperty("--ring", primaria);
-    raiz.style.setProperty("--sidebar-primary", primaria);
-    raiz.style.setProperty("--sidebar-ring", primaria);
+  const definir = (nome: string, hex: string) => {
+    const hsl = hexParaHsl(hex);
+    if (hsl) raiz.style.setProperty(nome, hsl);
+  };
+  for (const nome of ["--primary", "--ring", "--sidebar-primary", "--sidebar-ring"]) definir(nome, NEGOCIO.cores.primaria);
+  for (const nome of ["--primary-foreground", "--sidebar-primary-foreground"]) definir(nome, tintaLegivel(NEGOCIO.cores.primaria));
+  definir("--accent", NEGOCIO.cores.destaque);
+  definir("--accent-foreground", tintaLegivel(NEGOCIO.cores.destaque));
+  const tema = temaDaMarca();
+  if (tema) {
+    raiz.classList.remove("light", "dark");
+    raiz.classList.add(tema);
+    definir("--background", NEGOCIO.cores.fundo);
+    definir("--foreground", tintaLegivel(NEGOCIO.cores.fundo, NEGOCIO.cores.primaria));
   }
-  if (destaque) raiz.style.setProperty("--accent", destaque);
-  if (fundo) raiz.style.setProperty("--background", fundo);
 }
