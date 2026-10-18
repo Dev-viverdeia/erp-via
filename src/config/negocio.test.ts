@@ -11,7 +11,7 @@ describe("identidade do negócio", () => {
     aplicarNegocio();
     expect(temaDaMarca()).toBe("light");
     expect(document.documentElement.className).toBe("light");
-    expect(document.documentElement.style.getPropertyValue("--foreground")).toBe("214 71% 14%");
+    expect(document.documentElement.style.getPropertyValue("--foreground")).toBe("214.2857 71.0145% 13.5294%");
     expect(document.documentElement.style.getPropertyValue("--background")).toBe("0 0% 100%");
     expect(document.documentElement.lang).toBe("pt-BR");
   });
