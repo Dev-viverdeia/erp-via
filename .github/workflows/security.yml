@@ -26,4 +26,5 @@ jobs:
       - run: bash scripts/test-database-permissions.sh
         env:
           TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+      - run: npm test
       - run: npm run build
