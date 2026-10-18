@@ -93,7 +93,7 @@ export function hexParaHsl(hex: string): string | null {
     else if (max === g) h = ((b - r) / d + 2) * 60;
     else h = ((r - g) / d + 4) * 60;
   }
-  return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
+  return `${Number(h.toFixed(4))} ${Number((s * 100).toFixed(4))}% ${Number((l * 100).toFixed(4))}%`;
 }
 
 /** A marca com fundo definido mantém o mesmo tema em todos os dispositivos. */
