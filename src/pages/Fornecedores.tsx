@@ -105,7 +105,7 @@ const Fornecedores = () => {
           </div>
 
           {/* KPI Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-6">
             <KpiItem
               icon={Truck}
               label="Total Fornecedores"
