@@ -239,7 +239,7 @@ const Fornecedores = () => {
       </section>
 
       {/* Panels / Dialogs */}
-      <PartnerFormPanel open={formOpen} onOpenChange={setFormOpen} partner={editingPartner} />
+      <PartnerFormPanel open={formOpen} onOpenChange={setFormOpen} partner={editingPartner} defaultType="vendor" />
       <PartnerDeleteDialog
         open={!!deleteTarget}
         onOpenChange={(o) => { if (!o) setDeleteTarget(null); }}
