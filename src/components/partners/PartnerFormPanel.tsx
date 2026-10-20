@@ -26,16 +26,17 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   partner?: Partner | null;
+  defaultType?: FormValues["type"];
 }
 
-export function PartnerFormPanel({ open, onOpenChange, partner }: Props) {
+export function PartnerFormPanel({ open, onOpenChange, partner, defaultType = "customer" }: Props) {
   const create = useCreatePartner();
   const update = useUpdatePartner();
   const isEditing = !!partner;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { name: "", type: "customer", document: "", email: "", phone: "", notes: "" },
+    defaultValues: { name: "", type: defaultType, document: "", email: "", phone: "", notes: "" },
   });
 
   useEffect(() => {
@@ -49,9 +50,9 @@ export function PartnerFormPanel({ open, onOpenChange, partner }: Props) {
         notes: partner.notes ?? "",
       });
     } else {
-      form.reset({ name: "", type: "customer", document: "", email: "", phone: "", notes: "" });
+      form.reset({ name: "", type: defaultType, document: "", email: "", phone: "", notes: "" });
     }
-  }, [partner, open]);
+  }, [partner, open, defaultType, form]);
 
   const onSubmit = async (values: FormValues) => {
     try {
